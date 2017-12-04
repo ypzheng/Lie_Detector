@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    *** ASSIGNMENT: Photoplethysmography ***
+
+    You are not required to modify this file. You may make any changes to this file to suit
+    your needs: You may customize your UI as little or as much as you please.
+  -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_heart_rate">
+
+    <LinearLayout
+        android:id="@+id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/txtHeartRate"
+            android:text="@string/heart_rate_initial"
+            android:textSize="24sp"
+            android:textColor="@android:color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/heart"
+            android:gravity="center" />
+
+        <Switch
+            android:id="@+id/switchHeartRate"
+            android:text="@string/text_switch_heart_rate"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:ap="http://schemas.android.com/apk/res-auto"
+        android:layout_below="@id/layout"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent">
+
+        <com.androidplot.xy.XYPlot
+            style="@style/APDefacto.Light"
+            android:id="@+id/plot"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            ap:title="PPG Signal"
+            ap:rangeTitle="Red"
+            ap:lineLabels="left|bottom"
+            ap:lineLabelRotationBottom="-45"/>
+    </LinearLayout>
+
+</RelativeLayout>

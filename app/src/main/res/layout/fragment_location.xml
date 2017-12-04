@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    *** ASSIGNMENTS: Location Clustering ***
+
+    The location fragment will be used in the following assignment:
+
+        Location Clustering :   You will be required to show the location clusters on the map.
+                                This is done in the LocationsFragment, not here.
+
+    You may make any changes to this file to suit your needs. You may customize your UI as little
+    or as much as you please, e.g. you may want to add sliders for changing the clustering parameters.
+  -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.7"
+        tools:context=".MapActivity" >
+
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/mapView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <Button
+            android:id="@+id/btnToggleLocation"
+            android:layout_gravity="end|top"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/ic_location_off_black_48dp"/>
+
+        <Button
+            android:id="@+id/btnMapsSettings"
+            android:layout_gravity="start|bottom"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginBottom="25dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/ic_more_vert_black_48dp"/>
+
+    </FrameLayout>
+
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.3"
+        android:fadeScrollbars="false">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RadioGroup
+                android:id="@+id/radioGroupClusteringAlgorithm"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <RadioButton
+                    android:id="@+id/radioButtonDBScan"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="DB Scan"
+                    android:checked="true" />
+
+                <RadioButton
+                    android:id="@+id/radioButtonKMeans"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="k-Means"
+                    android:checked="false" />
+
+                <RadioButton
+                    android:id="@+id/radioButtonMeanShift"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="Mean Shift"
+                    android:checked="false" />
+
+            </RadioGroup>
+
+            <LinearLayout
+                android:id="@+id/parameters_kmeans"
+                android:layout_below="@id/radioGroupClusteringAlgorithm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="invisible">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="k:"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="10dp"/>
+                <EditText
+                    android:id="@+id/txtKClusters"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="4"
+                    android:inputType="number"
+                    android:hint="Number of clusters"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="20dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/parameters_dbscan"
+                android:layout_below="@+id/radioGroupClusteringAlgorithm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="eps:"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="10dp"/>
+                    <EditText
+                        android:id="@+id/txtEps"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="25"
+                        android:inputType="number"
+                        android:hint="Radius (m)"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="minPts:"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"/>
+                    <EditText
+                        android:id="@+id/txtMinPts"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="3"
+                        android:inputType="number"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="20dp"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnUpdateMap"
+                android:layout_below="@+id/parameters_dbscan"
+                android:layout_alignParentEnd="true"
+                android:text="Go"
+                android:textSize="12sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center" />
+        </RelativeLayout>
+    </ScrollView>
+
+</LinearLayout>

@@ -1,0 +1,7 @@
+<resources>
+    <string name="pref_msband_key">connect-over-msband</string>
+    <string name="pref_msband_title">Connect over Microsoft Band</string>
+    <string name="pref_msband_summaryOn">Accelerometer data will stream from the Microsoft Band.</string>
+    <string name="pref_msband_summaryOff">Accelerometer data will stream from your mobile phone.</string>
+    <bool name="pref_msband_default">false</bool>
+</resources>

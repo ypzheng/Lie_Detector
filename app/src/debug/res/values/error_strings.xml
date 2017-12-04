@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="err_unsupported_sdk_version">Microsoft Health BandService does not support your SDK Version. Please update to latest SDK.</string>
+    <string name="err_service">Microsoft Health BandService is not available. Please make sure Microsoft Health is installed and that you have the correct permissions.</string>
+    <string name="err_default">"Unknown error occurred: "</string>
+</resources>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    The About tab provides application details to the user. You will not be required to make
+    any changes to this tab.
+  -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/txtVersion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/about_app_version"
+        android:textSize="32sp"
+        android:paddingTop="10dp"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/txtDetails"
+        android:layout_below="@id/txtVersion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/app_details"
+        android:textSize="18sp"
+        android:paddingTop="10dp"
+        android:gravity="center"/>
+
+    <ImageView
+        tools:ignore="contentDescription"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/icLogo"
+        android:src="@drawable/ic_umass"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:paddingBottom="10dp"/>
+
+</RelativeLayout>

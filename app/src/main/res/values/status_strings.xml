@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="status_connecting">Band is connecting…</string>
+    <string name="status_connected">Band is connected.</string>
+    <string name="status_not_paired">Band is not paired with your phone.</string>
+    <string name="status_not_connected">Band is not connected. Please make sure bluetooth is on and the band is in range.</string>
+</resources>

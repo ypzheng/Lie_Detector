@@ -1,0 +1,14 @@
+<!--
+      This resource file maintains application strings. It is recommended that all strings
+      intended to be displayed to the user be kept in this file. It is a best practice, as it
+      allows strings to be maintained properly and allows the developer to specify translated files
+      based on language settings.
+
+      You may need to add strings to this file during your development.
+      -->
+<resources>
+    <string name="location_service_notification">Collecting Location Data</string>
+    <string name="audio_service_notification">Collecting Microphone Data</string>
+    <string name="activity_service_notification">Collecting Accelerometer Data</string>
+    <string name="ppg_service_notification">Collecting PPG Data</string>
+</resources>

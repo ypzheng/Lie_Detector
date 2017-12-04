@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <cs.umass.edu.myactivitiestoolkit.view.preference.SwitchPreference
+        android:title="@string/pref_msband_title"
+        android:key="@string/pref_msband_key"
+        android:defaultValue="@bool/pref_msband_default"
+        android:summaryOn="@string/pref_msband_summaryOn"
+        android:summaryOff="@string/pref_msband_summaryOff"/>
+
+</PreferenceScreen>

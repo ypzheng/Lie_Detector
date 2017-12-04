@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorLight">#080000ff</color>
+    <color name="colorStatus">#160000ff</color>
+    <color name="colorTabHighlight">#32020aff</color>
+    <color name="colorHighlight">#ff213aff</color>
+    <color name="colorPrimary">#ff364699</color>
+    <color name="colorPrimaryDark">#ff293480</color>
+    <color name="colorAccent">#ff001e69</color>
+
+    <color name="colorNotification">#ff124aaa</color>
+
+    <color name="colorTabHighlightInitial">#140205ff</color>
+    <color name="colorTabHighlightFinal">#35020aff</color>
+
+    <color name="transparentWhite">#00ffffff</color>
+
+    <color name="button_pressed_start">#88ffffff</color>
+    <color name="button_pressed_end">#44ffffff</color>
+    <color name="button_start">#66ffffff</color>
+    <color name="button_end">#22ffffff</color>
+
+    <color name="background_steps">#160000ff</color>
+    <color name="background_heart_rate">#16ff0000</color>
+    <color name="background_activity">#1600ff00</color>
+</resources>

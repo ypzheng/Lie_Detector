@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    *** ASSIGNMENTS: Speaker Identification ***
+
+    The audio fragment will be used in the following assignment:
+
+        Speaker Identification : You will be required to identify speakers using audio processing.
+
+    You may make any changes to this file to suit your needs. You may customize your UI as little
+    or as much as you please.
+  -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical" >
+
+    <Switch
+        android:id="@+id/switchMicrophone"
+        android:text="@string/text_switch_microphone"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/txtSpeaker"
+        android:layout_below="@id/switchMicrophone"
+        android:text="@string/speaker_initial"
+        android:textSize="20sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center" />
+
+    <ImageView
+        android:id="@+id/imgSpectrogram"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        tools:ignore="ContentDescription" />
+
+</RelativeLayout>
