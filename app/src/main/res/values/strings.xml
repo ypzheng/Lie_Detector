@@ -32,4 +32,5 @@
     <string name="text_switch_gps">Location</string>
 
     <string name="app_details">Lie Detector</string>
+    <string name="speaker_initial">NONE</string>
 </resources>

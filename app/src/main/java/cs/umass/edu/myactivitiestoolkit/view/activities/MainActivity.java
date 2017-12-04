@@ -28,6 +28,7 @@ import cs.umass.edu.myactivitiestoolkit.R;
 import cs.umass.edu.myactivitiestoolkit.constants.Constants;
 import cs.umass.edu.myactivitiestoolkit.util.PermissionsUtil;
 import cs.umass.edu.myactivitiestoolkit.view.fragments.AboutFragment;
+import cs.umass.edu.myactivitiestoolkit.view.fragments.AudioAndHeartFragment;
 import cs.umass.edu.myactivitiestoolkit.view.fragments.AudioFragment;
 import cs.umass.edu.myactivitiestoolkit.view.fragments.SettingsFragment;
 
@@ -126,6 +127,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public int getPageNumber() {
                 return 2;
+            }
+        },
+        AUDIOHEART(AudioAndHeartFragment.class){
+            @Override
+            public String getTitle() {
+                return "Audio & Heart";
+            }
+
+            @Override
+            public int getPageNumber() {
+                return 3;
             }
         };
 
