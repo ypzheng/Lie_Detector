@@ -29,7 +29,7 @@
     <TextView
         android:id="@+id/txtSpeaker"
         android:layout_below="@id/switchMicrophone"
-        android:text="@string/speaker_initial"
+        android:text="@string/lie_initial"
         android:textSize="20sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

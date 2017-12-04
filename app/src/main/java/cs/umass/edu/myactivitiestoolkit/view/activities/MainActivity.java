@@ -29,9 +29,6 @@ import cs.umass.edu.myactivitiestoolkit.constants.Constants;
 import cs.umass.edu.myactivitiestoolkit.util.PermissionsUtil;
 import cs.umass.edu.myactivitiestoolkit.view.fragments.AboutFragment;
 import cs.umass.edu.myactivitiestoolkit.view.fragments.AudioFragment;
-import cs.umass.edu.myactivitiestoolkit.view.fragments.ExerciseFragment;
-import cs.umass.edu.myactivitiestoolkit.view.fragments.HeartRateFragment;
-import cs.umass.edu.myactivitiestoolkit.view.fragments.LocationsFragment;
 import cs.umass.edu.myactivitiestoolkit.view.fragments.SettingsFragment;
 
 /**
