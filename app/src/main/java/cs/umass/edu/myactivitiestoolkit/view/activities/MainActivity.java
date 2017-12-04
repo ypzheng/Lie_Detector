@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         AUDIO_DATA(AudioFragment.class) {
             @Override
             public String getTitle() {
-                return "My Friends";
+                return "Lie Detector";
             }
 
             @Override
@@ -284,11 +284,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(final Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(final Menu menu) {
+//        getMenuInflater().inflate(R.menu.menu_main, menu);
+//        return true;
+//    }
 
     /**
      * Shows a removable status message at the bottom of the application.
