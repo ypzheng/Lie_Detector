@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <cs.umass.edu.myactivitiestoolkit.view.preference.SwitchPreference
+    <cs.umass.edu.myactivitiestoolkit.liedetector.view.preference.SwitchPreference
         android:title="@string/pref_msband_title"
         android:key="@string/pref_msband_key"
         android:defaultValue="@bool/pref_msband_default"
