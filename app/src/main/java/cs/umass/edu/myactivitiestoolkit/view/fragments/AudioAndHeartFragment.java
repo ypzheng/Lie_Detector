@@ -172,7 +172,7 @@ public class AudioAndHeartFragment extends Fragment{
                     else
                         numberOfPoints++;
 
-                    updatePlot();
+                    //updatePlot();
 
                 } else if (intent.getAction().equals(Constants.ACTION.BROADCAST_PPG_PEAK)){
                     long timestamp = intent.getLongExtra(Constants.KEY.PPG_PEAK_TIMESTAMP, -1);
@@ -183,7 +183,7 @@ public class AudioAndHeartFragment extends Fragment{
                     }
                 }else if (intent.getAction().equals(Constants.ACTION.BROADCAST_SPECTROGRAM)){
                     double[][] spectrogram = (double[][]) intent.getSerializableExtra(Constants.KEY.SPECTROGRAM);
-                    updateSpectrogram(spectrogram);
+                    //updateSpectrogram(spectrogram);
                 } else if (intent.getAction().equals(Constants.ACTION.BROADCAST_SPEAKER)){
                     final String speaker = intent.getStringExtra(Constants.KEY.SPEAKER);
                     getActivity().runOnUiThread(new Runnable() {
@@ -229,6 +229,7 @@ public class AudioAndHeartFragment extends Fragment{
         //AUDIO END***************************
         txtHeartRate = (TextView) view.findViewById(R.id.txtHeartRate);
 
+
         switchHeartRate = (Switch) view.findViewById(R.id.switchHeartRate);
         switchHeartRate.setChecked(serviceManager.isServiceRunning(PPGService.class));
         switchHeartRate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -246,7 +247,7 @@ public class AudioAndHeartFragment extends Fragment{
             }
         });
 
-        // initialize plot and set plot parameters
+        /*// initialize plot and set plot parameters
         plot = (XYPlot) view.findViewById(R.id.plot);
         plot.setRangeBoundaries(PPG_LOWER_BOUND, PPG_UPPER_BOUND, BoundaryMode.FIXED);
         plot.setRangeStep(StepMode.SUBDIVIDE, 4);
@@ -272,7 +273,7 @@ public class AudioAndHeartFragment extends Fragment{
         ppgSeriesFormatter = new LineAndPointFormatter(Color.RED, null, ContextCompat.getColor(getActivity(), R.color.background_heart_rate), null);
         peakSeriesFormatter = new LineAndPointFormatter(null, Color.BLUE, null, null);
         peakSeriesFormatter.getVertexPaint().setStrokeWidth(PixelUtils.dpToPix(10)); //enlarge the peak points
-
+*/
         return view;
     }
 
@@ -447,7 +448,7 @@ public class AudioAndHeartFragment extends Fragment{
      */
     private void onVideoPermissionsGranted(){
         Log.d(TAG, "Video permission granted");
-        clearPlotData();
+        //clearPlotData();
         serviceManager.startSensorService(PPGService.class);
     }
 
@@ -466,7 +467,7 @@ public class AudioAndHeartFragment extends Fragment{
 
     /**
      * Clears the PPG and peak plot data series.
-     */
+     *//*
     private void clearPlotData(){
         peakTimestamps.clear();
         peakValues.clear();
@@ -475,9 +476,9 @@ public class AudioAndHeartFragment extends Fragment{
         numberOfPoints = 0;
     }
 
-    /**
+    *//**
      * Updates and redraws the PPG plot, along with peaks detected.
-     */
+     *//*
     private void updatePlot(){
         XYSeries series1 = new SimpleXYSeries(new ArrayList<>(ppgTimestamps), new ArrayList<>(ppgValues), "PPG");
         XYSeries peaks = new SimpleXYSeries(new ArrayList<>(peakTimestamps), new ArrayList<>(peakValues), "PPG_PEAKS");
@@ -487,14 +488,14 @@ public class AudioAndHeartFragment extends Fragment{
         plot.addSeries(series1, ppgSeriesFormatter);
         plot.addSeries(peaks, peakSeriesFormatter);
         plot.redraw();
-    }
+    }*/
 
 
-
-    /**
+/*
+    *//**
      * Converts the spectrogram values into a heat map and projects the pixels onto a bitmap.
      * @param spectrogram the spectrogram values as a 2D array.
-     */
+     *//*
     private void updateSpectrogram(double[][] spectrogram){
         int width = spectrogram.length;
         int height = spectrogram[0].length;
@@ -529,7 +530,7 @@ public class AudioAndHeartFragment extends Fragment{
         int r = (int) Math.max(0, 255 * (ratio - 1));
         int g = 255 - b - r;
         return (r<<16|g<<8|b|255<<24);
-    }
+    }*/
 
 
 }

@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
 //                return 0;
 //            }
 //        },
-        AUDIO_DATA(AudioFragment.class) {
+        AUDIO_DATA(AudioAndHeartFragment.class) {
             @Override
             public String getTitle() {
                 return "Lie Detector";
@@ -127,17 +127,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public int getPageNumber() {
                 return 2;
-            }
-        },
-        AUDIOHEART(AudioAndHeartFragment.class){
-            @Override
-            public String getTitle() {
-                return "Audio & Heart";
-            }
-
-            @Override
-            public int getPageNumber() {
-                return 3;
             }
         };
 
