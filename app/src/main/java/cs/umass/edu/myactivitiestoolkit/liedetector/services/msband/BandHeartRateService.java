@@ -1,6 +1,5 @@
 package cs.umass.edu.myactivitiestoolkit.liedetector.services.msband;
 
-import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -14,15 +13,10 @@ import com.microsoft.band.UserConsent;
 import com.microsoft.band.sensors.BandHeartRateEvent;
 import com.microsoft.band.sensors.BandHeartRateEventListener;
 import com.microsoft.band.sensors.HeartRateConsentListener;
-import com.microsoft.band.sensors.SampleRate;
-
-import java.lang.ref.WeakReference;
 
 import cs.umass.edu.myactivitiestoolkit.liedetector.R;
 import cs.umass.edu.myactivitiestoolkit.liedetector.constants.Constants;
 import cs.umass.edu.myactivitiestoolkit.liedetector.services.SensorService;
-import cs.umass.edu.myactivitiestoolkit.liedetector.view.activities.MainActivity;
-import cs.umass.edu.myactivitiestoolkit.liedetector.view.fragments.AudioFragment;
 import cs.umass.edu.myactivitiestoolkit.liedetector.view.fragments.SettingsFragment;
 
 /**

@@ -17,6 +17,8 @@ import com.microsoft.band.ConnectionState;
 import com.microsoft.band.sensors.BandAccelerometerEventListener;
 import com.microsoft.band.sensors.BandGyroscopeEvent;
 import com.microsoft.band.sensors.BandGyroscopeEventListener;
+import com.microsoft.band.sensors.BandHeartRateEvent;
+import com.microsoft.band.sensors.BandHeartRateEventListener;
 import com.microsoft.band.sensors.SampleRate;
 
 import org.json.JSONException;
@@ -25,6 +27,7 @@ import org.json.JSONObject;
 import cs.umass.edu.myactivitiestoolkit.liedetector.R;
 import cs.umass.edu.myactivitiestoolkit.liedetector.communication.MHLClientFilter;
 import cs.umass.edu.myactivitiestoolkit.liedetector.constants.Constants;
+import cs.umass.edu.myactivitiestoolkit.liedetector.ppg.HRSensorReading;
 import cs.umass.edu.myactivitiestoolkit.liedetector.services.SensorService;
 import cs.umass.edu.myactivitiestoolkit.liedetector.steps.OnStepListener;
 import cs.umass.edu.myactivitiestoolkit.liedetector.steps.StepDetector;
@@ -46,7 +49,7 @@ import edu.umass.cs.MHLClient.sensors.GyroscopeReading;
  * @see BandClient
  * @see BandGyroscopeEventListener
  */
-public class BandService extends SensorService implements BandGyroscopeEventListener {
+public class BandService extends SensorService implements BandGyroscopeEventListener, BandHeartRateEventListener {
 
     /** used for debugging purposes */
     private static final String TAG = BandService.class.getName();
@@ -123,6 +126,13 @@ public class BandService extends SensorService implements BandGyroscopeEventList
         manager.sendBroadcast(intent);
     }
 
+    @Override
+    public void onBandHeartRateChanged(BandHeartRateEvent bandHeartRateEvent) {
+        broadcastStatus(bandHeartRateEvent.getHeartRate()+"");
+        HRSensorReading reading = new HRSensorReading(userID, "", "", bandHeartRateEvent.getTimestamp(), bandHeartRateEvent.getHeartRate());
+        client.sendSensorReading(reading);
+    }
+
     /**
      * Asynchronous task for connecting to the Microsoft Band accelerometer and gyroscope sensors.
      * Errors may arise if the Band does not support the Band SDK version or the Microsoft Health
@@ -140,6 +150,8 @@ public class BandService extends SensorService implements BandGyroscopeEventList
                 if (getConnectedBandClient()) {
                     broadcastStatus(getString(R.string.status_connected));
                     bandClient.getSensorManager().registerGyroscopeEventListener(BandService.this, SampleRate.MS16);
+                    bandClient.getSensorManager().registerHeartRateEventListener(BandService.this);
+
                 } else {
                     broadcastStatus(getString(R.string.status_not_connected));
                 }
@@ -322,5 +334,8 @@ public class BandService extends SensorService implements BandGyroscopeEventList
         intent.setAction(Constants.ACTION.BROADCAST_SERVER_STEP_COUNT);
         LocalBroadcastManager manager = LocalBroadcastManager.getInstance(this);
         manager.sendBroadcast(intent);
+    }
+
+    private class HeartBeatReading {
     }
 }
