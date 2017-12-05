@@ -43,4 +43,13 @@
         android:layout_centerVertical="true"
         tools:ignore="ContentDescription" />
 
+    <TextView
+        android:id="@+id/heartRate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtSpeaker"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="18dp"
+        android:text="@string/heart_rate" />
+
 </RelativeLayout>

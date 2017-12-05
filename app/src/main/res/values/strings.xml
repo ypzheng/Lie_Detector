@@ -31,6 +31,8 @@
     <string name="text_switch_heart_rate">Photoplethysmography</string>
     <string name="text_switch_gps">Location</string>
 
+    <string name="heart_rate">Heart Rate: 0</string>
+
     <string name="app_details">Lie Detector</string>
     <string name="speaker_initial">NONE</string>
 </resources>
