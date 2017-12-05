@@ -13,11 +13,6 @@ import android.widget.Switch;
 
 import cs.umass.edu.myactivitiestoolkit.liedetector.R;
 
-import cs.umass.edu.myactivitiestoolkit.liedetector.services.ServiceManager;
-import cs.umass.edu.myactivitiestoolkit.liedetector.services.msband.BandService;
-import cs.umass.edu.myactivitiestoolkit.liedetector.view.fragments.SettingsFragment;
-import cs.umass.edu.myactivitiestoolkit.liedetector.services.msband.BandHeartRateService;
-
 /**
  * A boolean preference with an on/off switch widget. After API 24, you may (and should) use
  * {@link android.preference.SwitchPreference} instead.
@@ -25,10 +20,6 @@ import cs.umass.edu.myactivitiestoolkit.liedetector.services.msband.BandHeartRat
  * @author CS390MB
  */
 public class SwitchPreference extends Preference {
-
-    private BandHeartRateService bandHeartRateService;
-    private SettingsFragment settingFrag = new SettingsFragment();
-    private ServiceManager serviceManager;
     /**
      * the default preference value in the case that it is not defined in the XML attributes
      */
@@ -51,8 +42,6 @@ public class SwitchPreference extends Preference {
     @Override
     protected View onCreateView(ViewGroup parent) {
         setWidgetLayoutResource(R.layout.switch_toggle_service);
-        bandHeartRateService = new BandHeartRateService();
-        serviceManager = ServiceManager.getInstance(settingFrag.getActivity());
         return super.onCreateView(parent);
     }
 
@@ -68,12 +57,6 @@ public class SwitchPreference extends Preference {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean enabled) {
                 preferences.edit().putBoolean(getKey(), enabled).apply();
-                if (enabled){
-                    serviceManager.startSensorService(BandHeartRateService.class);
-                }
-                else{
-                    serviceManager.stopSensorService(BandService.class);
-                }
             }
         });
     }

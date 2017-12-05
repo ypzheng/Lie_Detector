@@ -219,10 +219,12 @@ public class AudioFragment extends Fragment {
                     updateSpectrogram(spectrogram);
                 } else if (intent.getAction().equals(Constants.ACTION.BROADCAST_SPEAKER)){
                     final String speaker = intent.getStringExtra(Constants.KEY.SPEAKER);
+                    final String heartBeat = intent.getStringExtra(Constants.KEY.HEART_RATE);
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             txtSpeaker.setText(speaker);
+                            heartRate.setText(heartBeat);
                         }
                     });
                 }
