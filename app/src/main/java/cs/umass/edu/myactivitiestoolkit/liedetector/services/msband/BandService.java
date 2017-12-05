@@ -34,6 +34,7 @@ import cs.umass.edu.myactivitiestoolkit.liedetector.steps.StepDetector;
 import edu.umass.cs.MHLClient.client.MessageReceiver;
 import edu.umass.cs.MHLClient.sensors.AccelerometerReading;
 import edu.umass.cs.MHLClient.sensors.GyroscopeReading;
+import edu.umass.cs.MHLClient.sensors.SensorReading;
 
 /**
  * The BandService is responsible for starting and stopping the sensors on the Band and receiving
@@ -151,7 +152,6 @@ public class BandService extends SensorService implements BandGyroscopeEventList
                     broadcastStatus(getString(R.string.status_connected));
                     bandClient.getSensorManager().registerGyroscopeEventListener(BandService.this, SampleRate.MS16);
                     bandClient.getSensorManager().registerHeartRateEventListener(BandService.this);
-
                 } else {
                     broadcastStatus(getString(R.string.status_not_connected));
                 }
@@ -323,6 +323,7 @@ public class BandService extends SensorService implements BandGyroscopeEventList
         LocalBroadcastManager manager = LocalBroadcastManager.getInstance(this);
         manager.sendBroadcast(intent);
     }
+
 
     /**
      * Broadcasts the step count computed by your server-side step detection algorithm

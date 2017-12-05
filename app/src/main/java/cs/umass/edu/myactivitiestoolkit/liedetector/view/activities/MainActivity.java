@@ -1,6 +1,7 @@
 package cs.umass.edu.myactivitiestoolkit.liedetector.view.activities;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.BroadcastReceiver;
@@ -9,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
@@ -21,7 +23,18 @@ import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+
+import com.microsoft.band.BandClient;
+import com.microsoft.band.BandClientManager;
+import com.microsoft.band.BandException;
+import com.microsoft.band.BandInfo;
+import com.microsoft.band.ConnectionState;
+import com.microsoft.band.sensors.HeartRateConsentListener;
+
+import java.lang.ref.WeakReference;
 
 import cs.umass.edu.myactivitiestoolkit.liedetector.R;
 import cs.umass.edu.myactivitiestoolkit.liedetector.constants.Constants;
@@ -51,6 +64,9 @@ public class MainActivity extends AppCompatActivity {
     /** used for debugging purposes */
     private static final String TAG = MainActivity.class.getName();
 
+    private BandClient bandClient = null;
+    final WeakReference<Activity> reference = new WeakReference<Activity>(this);
+
     /**
      * Defines all available tabs in the main UI. For help on enums,
      * see the <a href="https://docs.oracle.com/javase/tutorial/java/javaOO/enum.html">Java documentation</a>.
@@ -62,17 +78,6 @@ public class MainActivity extends AppCompatActivity {
      * If you wish to add another tab, e.g. for your final project, just follow the same setup.
      */
     public enum PAGES {
-//        MOTION_DATA(ExerciseFragment.class) {
-//            @Override
-//            public String getTitle() {
-//                return "My Exercise";
-//            }
-//
-//            @Override
-//            public int getPageNumber() {
-//                return 0;
-//            }
-//        },
         AUDIO_DATA(AudioFragment.class) {
             @Override
             public String getTitle() { return "Lie Detector";}
@@ -81,39 +86,6 @@ public class MainActivity extends AppCompatActivity {
             public int getPageNumber() {return 0;}
 
         },
-//        PPG_DATA(AudioAndHeartFragment.class) {
-//            @Override
-//            public String getTitle() {
-//                return "Lie Detector";
-//            }
-//
-//            @Override
-//            public int getPageNumber() {
-//                return 0;
-//            }
-//        },
-//        PPG_DATA(HeartRateFragment.class) {
-//            @Override
-//            public String getTitle() {
-//                return "My Heart";
-//            }
-//
-//            @Override
-//            public int getPageNumber() {
-//                return 2;
-//            }
-//        },
-//        LOCATION_DATA(LocationsFragment.class) {
-//            @Override
-//            public String getTitle() {
-//                return "My Locations";
-//            }
-//
-//            @Override
-//            public int getPageNumber() {
-//                return 3;
-//            }
-//        },
         SETTINGS(SettingsFragment.class) {
             @Override
             public String getTitle() {
@@ -200,6 +172,9 @@ public class MainActivity extends AppCompatActivity {
     /** Displays status messages, e.g. connection station. **/
     private TextView txtStatus;
 
+    /** Displays consent button **/
+    private Button consent_btn;
+
     /**
      * Unique phone identifier, required to connect to the server.
      */
@@ -270,6 +245,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
         txtStatus = (TextView) findViewById(R.id.status);
+        consent_btn = (Button) findViewById((R.id.consent_btn));
 
         // if the activity was started by clicking a notification, then the intent contains the
         // notification ID and can be used to set the proper tab.
@@ -290,6 +266,12 @@ public class MainActivity extends AppCompatActivity {
 //                    break;
             }
         }
+        consent_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new HeartRateConsentTask().execute(reference);
+            }
+        });
     }
 
 //    @Override
@@ -401,5 +383,67 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    private boolean getConnectedBandClient() throws InterruptedException, BandException {
+        if (bandClient == null) {
+            BandInfo[] devices = BandClientManager.getInstance().getPairedBands();
+            if (devices.length == 0) {
+                broadcastStatus(getString(R.string.status_not_paired));
+                return false;
+            }
+            bandClient = BandClientManager.getInstance().create(getBaseContext(), devices[0]);
+        } else if (ConnectionState.CONNECTED == bandClient.getConnectionState()) {
+            return true;
+        }
+
+        broadcastStatus(getString(R.string.status_connecting));
+        return ConnectionState.CONNECTED == bandClient.connect().await();
+    }
+
+    private class HeartRateConsentTask extends AsyncTask<WeakReference<Activity>, Void, Void> {
+        @Override
+        protected Void doInBackground(WeakReference<Activity>... params) {
+            try {
+                if (getConnectedBandClient()) {
+                    if (params[0].get() != null) {
+                        bandClient.getSensorManager().requestHeartRateConsent(params[0].get(), new HeartRateConsentListener() {
+                            @Override
+                            public void userAccepted(boolean consentGiven) {
+                            }
+                        });
+                    }
+                } else {
+                    broadcastStatus(getString(R.string.status_not_connected));
+                }
+            } catch (BandException e) {
+                String exceptionMessage;
+                switch (e.getErrorType()) {
+                    case UNSUPPORTED_SDK_VERSION_ERROR:
+                        exceptionMessage = getString(R.string.err_unsupported_sdk_version);
+                        break;
+                    case SERVICE_ERROR:
+                        exceptionMessage = getString(R.string.err_service);
+                        break;
+                    default:
+                        exceptionMessage = getString(R.string.err_default) + e.getMessage();
+                        break;
+                }
+                Log.e(TAG, exceptionMessage);
+                broadcastStatus(exceptionMessage);
+
+            } catch (Exception e) {
+                broadcastStatus(getString(R.string.err_default) + e.getMessage());
+            }
+            return null;
+        }
+    }
+
+    private void broadcastStatus(String message) {
+        Intent intent = new Intent();
+        intent.putExtra(Constants.KEY.STATUS, message);
+        intent.setAction(Constants.ACTION.BROADCAST_STATUS);
+        LocalBroadcastManager manager = LocalBroadcastManager.getInstance(this);
+        manager.sendBroadcast(intent);
     }
 }

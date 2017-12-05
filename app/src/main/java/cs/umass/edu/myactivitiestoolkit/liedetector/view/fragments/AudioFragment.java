@@ -116,6 +116,7 @@ public class AudioFragment extends Fragment {
         filter.addAction(Constants.ACTION.BROADCAST_MESSAGE);
         filter.addAction(Constants.ACTION.BROADCAST_SPECTROGRAM);
         filter.addAction(Constants.ACTION.BROADCAST_SPEAKER);
+        filter.addAction(Constants.ACTION.BROADCAST_HEART_RATE);
         broadcastManager.registerReceiver(receiver, filter);
     }
 
@@ -157,6 +158,7 @@ public class AudioFragment extends Fragment {
             requestPermissions(permissions, AUDIO_PERMISSION_REQUEST_CODE);
             return;
         }
+
         onPermissionGranted();
     }
 
@@ -219,16 +221,30 @@ public class AudioFragment extends Fragment {
                     updateSpectrogram(spectrogram);
                 } else if (intent.getAction().equals(Constants.ACTION.BROADCAST_SPEAKER)){
                     final String speaker = intent.getStringExtra(Constants.KEY.SPEAKER);
-                    final String heartBeat = intent.getStringExtra(Constants.KEY.HEART_RATE);
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             txtSpeaker.setText(speaker);
-                            heartRate.setText(heartBeat);
+                        }
+                    });
+                } else if (intent.getAction().equals(Constants.ACTION.BROADCAST_HEART_RATE)){
+                    final String heartbeat = intent.getStringExtra(Constants.KEY.HEART_RATE);
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            heartRate.setText(heartbeat);
                         }
                     });
                 }
+
             }
+            final String heartBeat = intent.getStringExtra(Constants.KEY.HEART_RATE);
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    heartRate.setText(heartBeat);
+                }
+            });
         }
     };
 

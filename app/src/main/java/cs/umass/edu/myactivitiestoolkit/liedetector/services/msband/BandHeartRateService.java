@@ -1,5 +1,6 @@
 package cs.umass.edu.myactivitiestoolkit.liedetector.services.msband;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -13,6 +14,8 @@ import com.microsoft.band.UserConsent;
 import com.microsoft.band.sensors.BandHeartRateEvent;
 import com.microsoft.band.sensors.BandHeartRateEventListener;
 import com.microsoft.band.sensors.HeartRateConsentListener;
+
+import java.lang.ref.WeakReference;
 
 import cs.umass.edu.myactivitiestoolkit.liedetector.R;
 import cs.umass.edu.myactivitiestoolkit.liedetector.constants.Constants;
@@ -97,43 +100,43 @@ public class BandHeartRateService extends SensorService implements BandHeartRate
         return ConnectionState.CONNECTED == bandClient.connect().await();
     }
 
-//    private class HeartRateConsentTask extends AsyncTask<Void, Void, Void> {
-//        @Override
-//        protected Void doInBackground(Void... params) {
-//            try {
-//                if (getConnectedBandClient()) {
-//                    if (params[0].get() != null) {
-//                        bandClient.getSensorManager().requestHeartRateConsent(params[0].get(), new HeartRateConsentListener() {
-//                            @Override
-//                            public void userAccepted(boolean consentGiven) {
-//                            }
-//                        });
-//                    }
-//                } else {
-//                    broadcastStatus(getString(R.string.status_not_connected));
-//                }
-//            } catch (BandException e) {
-//                String exceptionMessage;
-//                switch (e.getErrorType()) {
-//                    case UNSUPPORTED_SDK_VERSION_ERROR:
-//                        exceptionMessage = getString(R.string.err_unsupported_sdk_version);
-//                        break;
-//                    case SERVICE_ERROR:
-//                        exceptionMessage = getString(R.string.err_service);
-//                        break;
-//                    default:
-//                        exceptionMessage = getString(R.string.err_default) + e.getMessage();
-//                        break;
-//                }
-//                Log.e(TAG, exceptionMessage);
-//                broadcastStatus(exceptionMessage);
-//
-//            } catch (Exception e) {
-//                broadcastStatus(getString(R.string.err_default) + e.getMessage());
-//            }
-//            return null;
-//        }
-//    }
+    private class HeartRateConsentTask extends AsyncTask<WeakReference<Activity>, Void, Void> {
+        @Override
+        protected Void doInBackground(WeakReference<Activity>... params) {
+            try {
+                if (getConnectedBandClient()) {
+                    if (params[0].get() != null) {
+                        bandClient.getSensorManager().requestHeartRateConsent(params[0].get(), new HeartRateConsentListener() {
+                            @Override
+                            public void userAccepted(boolean consentGiven) {
+                            }
+                        });
+                    }
+                } else {
+                    broadcastStatus(getString(R.string.status_not_connected));
+                }
+            } catch (BandException e) {
+                String exceptionMessage;
+                switch (e.getErrorType()) {
+                    case UNSUPPORTED_SDK_VERSION_ERROR:
+                        exceptionMessage = getString(R.string.err_unsupported_sdk_version);
+                        break;
+                    case SERVICE_ERROR:
+                        exceptionMessage = getString(R.string.err_service);
+                        break;
+                    default:
+                        exceptionMessage = getString(R.string.err_default) + e.getMessage();
+                        break;
+                }
+                Log.e(TAG, exceptionMessage);
+                broadcastStatus(exceptionMessage);
+
+            } catch (Exception e) {
+                broadcastStatus(getString(R.string.err_default) + e.getMessage());
+            }
+            return null;
+        }
+    }
 
     @Override
     public void onBandHeartRateChanged(BandHeartRateEvent bandHeartRateEvent) {
