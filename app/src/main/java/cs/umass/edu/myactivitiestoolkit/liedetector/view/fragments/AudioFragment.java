@@ -7,10 +7,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
@@ -26,10 +28,13 @@ import cs.umass.edu.myactivitiestoolkit.liedetector.constants.Constants;
 import cs.umass.edu.myactivitiestoolkit.liedetector.services.AccelerometerService;
 import cs.umass.edu.myactivitiestoolkit.liedetector.services.AudioService;
 import cs.umass.edu.myactivitiestoolkit.liedetector.services.PPGService;
+import cs.umass.edu.myactivitiestoolkit.liedetector.services.msband.BandService;
 import cs.umass.edu.myactivitiestoolkit.liedetector.util.PermissionsUtil;
 import cs.umass.edu.myactivitiestoolkit.liedetector.services.ServiceManager;
 
 public class AudioFragment extends Fragment {
+
+    private TextView heartRate;
 
     @SuppressWarnings("unused")
     /** Used during debugging to identify logs by class */
@@ -65,14 +70,21 @@ public class AudioFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean enable) {
                 if (enable){
-                    requestPermissions();
+                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                    boolean onMSBand = preferences.getBoolean(getString(R.string.pref_msband_key),
+                            getResources().getBoolean(R.bool.pref_msband_default));
+                    if (onMSBand){
+                        requestPermissions();
+                    }
                 } else {
                     serviceManager.stopSensorService(AudioService.class);
+                    serviceManager.stopSensorService(BandService.class);
                 }
             }
         });
         imgSpectrogram = (ImageView) rootView.findViewById(R.id.imgSpectrogram);
         txtSpeaker = (TextView) rootView.findViewById(R.id.txtSpeaker);
+        heartRate = (TextView)rootView.findViewById(R.id.heartRate);
         return rootView;
     }
 
@@ -81,7 +93,7 @@ public class AudioFragment extends Fragment {
      * {@link AudioService}. The intent filter defines messages we are interested in receiving.
      * <br><br>
      *
-     * Unlike the {@link ExerciseFragment} and {@link HeartRateFragment}, we do not visualize
+     * Unlike the {@link} and {@link HeartRateFragment}, we do not visualize
      * the raw data. For this reason, there is no need to listen for it from the main UI. We
      * would, however, like to display a spectrogram of the audio data. To do this, we listen for
      * {@link Constants.ACTION#BROADCAST_SPECTROGRAM}.
@@ -127,6 +139,7 @@ public class AudioFragment extends Fragment {
      */
     public void onPermissionGranted(){
         serviceManager.startSensorService(AudioService.class);
+        serviceManager.startSensorService(BandService.class);
     }
 
     /**
