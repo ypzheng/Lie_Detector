@@ -1,11 +1,6 @@
 package cs.umass.edu.myactivitiestoolkit.liedetector.services.msband;
 
-import android.app.Notification;
-import android.app.Service;
-import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v4.content.LocalBroadcastManager;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.microsoft.band.BandClient;
@@ -14,42 +9,15 @@ import com.microsoft.band.BandException;
 import com.microsoft.band.BandIOException;
 import com.microsoft.band.BandInfo;
 import com.microsoft.band.ConnectionState;
-import com.microsoft.band.sensors.BandAccelerometerEventListener;
-import com.microsoft.band.sensors.BandGyroscopeEvent;
-import com.microsoft.band.sensors.BandGyroscopeEventListener;
 import com.microsoft.band.sensors.BandHeartRateEvent;
 import com.microsoft.band.sensors.BandHeartRateEventListener;
-import com.microsoft.band.sensors.SampleRate;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import cs.umass.edu.myactivitiestoolkit.liedetector.R;
-import cs.umass.edu.myactivitiestoolkit.liedetector.communication.MHLClientFilter;
 import cs.umass.edu.myactivitiestoolkit.liedetector.constants.Constants;
 import cs.umass.edu.myactivitiestoolkit.liedetector.ppg.HRSensorReading;
 import cs.umass.edu.myactivitiestoolkit.liedetector.services.SensorService;
-import cs.umass.edu.myactivitiestoolkit.liedetector.steps.OnStepListener;
-import cs.umass.edu.myactivitiestoolkit.liedetector.steps.StepDetector;
-import edu.umass.cs.MHLClient.client.MessageReceiver;
-import edu.umass.cs.MHLClient.sensors.AccelerometerReading;
-import edu.umass.cs.MHLClient.sensors.GyroscopeReading;
-import edu.umass.cs.MHLClient.sensors.SensorReading;
 
-/**
- * The BandService is responsible for starting and stopping the sensors on the Band and receiving
- * accelerometer and gyroscope data periodically. It is a foreground service, so that the user
- * can close the application on the phone and continue to receive data from the wearable device.
- * Because the {@link BandGyroscopeEvent} also receives accelerometer readings, we only need to
- * register a {@link BandGyroscopeEventListener} and no {@link BandAccelerometerEventListener}.
- * This should be compatible with both the Microsoft Band and Microsoft Band 2.
- *
- * @author Sean Noran
- *
- * @see Service#startForeground(int, Notification)
- * @see BandClient
- * @see BandGyroscopeEventListener
- */
+
 public class BandService extends SensorService implements BandHeartRateEventListener {
 
     /** used for debugging purposes */
@@ -76,7 +44,7 @@ public class BandService extends SensorService implements BandHeartRateEventList
     @Override
     public void onBandHeartRateChanged(BandHeartRateEvent bandHeartRateEvent) {
         broadcastStatus(bandHeartRateEvent.getHeartRate()+"");
-        HRSensorReading reading = new HRSensorReading(userID, "", "", bandHeartRateEvent.getTimestamp(), bandHeartRateEvent.getHeartRate());
+        HRSensorReading reading = new HRSensorReading(userID,"MOBILE","", bandHeartRateEvent.getTimestamp(), bandHeartRateEvent.getHeartRate());
         client.sendSensorReading(reading);
     }
 
