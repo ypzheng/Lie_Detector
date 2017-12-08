@@ -22,8 +22,8 @@ user_id = "hv3u9sd28rgi3p6e"
 
 # TODO: Change the filename of the output file.
 # You should keep it in the format "speaker-data-<speaker>-#.csv"
-audio_filename="audio-andy-1.csv"#"SENSOR-NAME-#OFANSWER.csv"
-heart_filename="ppg-andy-1.csv"
+audio_filename="audio-caitlyn-20.csv"#"SENSOR-NAME-#OFANSWER.csv"
+heart_filename="ppg-caitlyn-20.csv"
 # 0=Caitlyn, 1=Allen, 2=None, 3=Andy
 
 # TODO: Change the label to match the speaker; it must be numeric
