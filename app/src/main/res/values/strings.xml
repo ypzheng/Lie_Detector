@@ -38,4 +38,7 @@
 
     <string name="app_details">Lie Detector</string>
     <string name="speaker_initial">NONE</string>
+
+    <string name="lie_detector_title">Lie Detector</string>
+    <string name="lie_rate_initial">0%</string>
 </resources>
