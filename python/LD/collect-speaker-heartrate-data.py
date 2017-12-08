@@ -122,7 +122,7 @@ try:
                     continue
                 previous_json = '' # reset if all were successful
                 sensor_type = data['sensor_type']
-                
+
                 if (sensor_type == u"SENSOR_AUDIO"):
                     t = data['data']['t']
                     audio_buffer=data['data']['values']
@@ -131,12 +131,12 @@ try:
                     audio_instance.extend(audio_buffer)
                     #labelled_instance.append(label)
                     audio_data.append(audio_instance)
-                if (sensor_type == u"SENSOR_PPG"):
+                if (sensor_type == u"SENSOR_HR"):
                     t = data['data']['t']
                     heart_buffer = data['data']['value']
                     print("Received heart rate data {}".format(heart_buffer))
                     heart_data.append([t, heart_buffer])
-                    
+
 
             sys.stdout.flush()
         except KeyboardInterrupt:
