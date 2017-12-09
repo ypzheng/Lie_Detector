@@ -46,7 +46,7 @@ class_names = [] # the set of classes, i.e. speakers
 data = np.zeros((0,8003)) #8003 = 1 (timestamp) + 8000 (for 8kHz audio data) + 1 (heart rate) + 1 label
 
 for filename in os.listdir(data_dir):
-    if filename.endswith(".csv") and filename.startswith("audio-allen"):
+    if filename.endswith(".csv") and filename.startswith("audio-caitlyn"):
         filename_components = filename.split("-") # split by the '-' character
         
         speaker = filename_components[1]
@@ -64,7 +64,7 @@ for filename in os.listdir(data_dir):
         audio_for_current_speaker = np.genfromtxt(audio_file, delimiter=',')
         
         #Heart rate
-        heart_file = os.path.join(data_dir, "ppg-allen-"+number+"-"+label)
+        heart_file = os.path.join(data_dir, "ppg-caitlyn-"+number+"-"+label)
         heart_for_current_speaker = np.genfromtxt(heart_file, delimiter=",")
 
         len_audio = len(audio_for_current_speaker)
@@ -98,7 +98,11 @@ print("Found data for {} speakers : {}".format(len(class_names), ", ".join(class
 # -----------------------------------------------------------------------------
 
 # You may need to change this depending on how you compute your features
-n_features = 626 # 20 formant features + 16 pitch contour features + 75 mfcc delta coefficients
+n_format = 55
+n_pitch = 64
+n_heart_rate = 1
+n_mfcc = 507
+n_features = n_format + n_pitch + n_heart_rate+n_mfcc # 20 formant features + 16 pitch contour features + 75 mfcc delta coefficients
 
 print("Extracting features and labels for {} audio windows...".format(data.shape[0]))
 sys.stdout.flush()
@@ -110,13 +114,18 @@ y = np.zeros(0,)
 feature_extractor = FeatureExtractor(debug=False)
 
 for i,window_with_timestamp_and_label in enumerate(data):
-    window = window_with_timestamp_and_label[1:-1]
+    window = window_with_timestamp_and_label[1:-2]
     label = data[i,-1]
     print "Extracting features for window " + str(i) + "..."
     x = feature_extractor.extract_features(window)
     if (len(x) != X.shape[1]):
         print("Received feature vector of length {}. Expected feature vector of length {}.".format(len(x), X.shape[1]))
+    
+    #Add the heart rate features
+    x = np.append(x, window_with_timestamp_and_label[-2])
+
     X = np.append(X, np.reshape(x, (1,-1)), axis=0)
+    
     y = np.append(y, label)
 
 print("Finished feature extraction over {} windows".format(len(X)))
@@ -142,8 +151,8 @@ trees.append(DecisionTreeClassifier(criterion="entropy", max_depth=4))
 for tree_index, tree in enumerate(trees):
 
    total_accuracy = 0.0
-   total_precision = [0.0, 0.0, 0.0, 0.0]
-   total_recall = [0.0, 0.0, 0.0, 0.0]
+   total_precision = [0.0, 0.0]
+   total_recall = [0.0, 0.0]
 
    cv = cross_validation.KFold(n, n_folds=10, shuffle=True, random_state=None)
    for i, (train_indexes, test_indexes) in enumerate(cv):
@@ -161,7 +170,7 @@ for tree_index, tree in enumerate(trees):
        y_pred = tree.predict(X_test)
 
        # show the comparison between the predicted and ground-truth labels
-       conf = confusion_matrix(y_test, y_pred, labels=[0,1,2,3])
+       conf = confusion_matrix(y_test, y_pred, labels=[0,1])
 
        accuracy = np.sum(np.diag(conf)) / float(np.sum(conf))
        precision = np.nan_to_num(np.diag(conf) / np.sum(conf, axis=1).astype(float))
