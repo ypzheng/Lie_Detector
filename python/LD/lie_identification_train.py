@@ -101,8 +101,9 @@ print("Found data for {} speakers : {}".format(len(class_names), ", ".join(class
 n_format = 55
 n_pitch = 64
 n_heart_rate = 1
-n_mfcc = 507
-n_features = n_format + n_pitch + n_heart_rate+n_mfcc # 20 formant features + 16 pitch contour features + 75 mfcc delta coefficients
+n_mfcc = 0 #507
+n_st_features = 8 + 13
+n_features = n_format + n_pitch + n_heart_rate+n_mfcc +n_st_features# 20 formant features + 16 pitch contour features + 75 mfcc delta coefficients
 
 print("Extracting features and labels for {} audio windows...".format(data.shape[0]))
 sys.stdout.flush()
@@ -123,7 +124,7 @@ for i,window_with_timestamp_and_label in enumerate(data):
     
     #Add the heart rate features
     x = np.append(x, window_with_timestamp_and_label[-2])
-
+   
     X = np.append(X, np.reshape(x, (1,-1)), axis=0)
     
     y = np.append(y, label)

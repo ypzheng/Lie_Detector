@@ -26,7 +26,7 @@ from scikits.talkbox import lpc
 
 from aubio import pitch
 from python_speech_features import mfcc
-
+import audioFeatureExtraction as FE
 # Uncomment to complete the speech recognition extra credit:
 #import speech_recognition as sr
 #from pocketsphinx.pocketsphinx import *
@@ -348,7 +348,53 @@ class FeatureExtractor():
 
         x = np.append(x, self._compute_formant_features(window))
         x = np.append(x, self._compute_pitch_features(window))
-        x = np.append(x, self._compute_delta_coefficients(window, n=20 ))
+        #x = np.append(x, self._compute_delta_coefficients(window, n=20 ))
         # x = np.append(x, self._compute_delta_delta_coefficients(window, n=20))
+        x = np.append(x, self._compute_st_extract_features(window))
 
         return x
+
+    def _compute_st_extract_features(self, window):
+
+            Fs = 8000
+
+            Win = len(window)
+            signal = np.double(window)
+
+            signal = signal / (2.0**15)
+            DC = signal.mean()
+            MAX = (np.abs(signal)).max()
+            signal = (signal - DC) / (MAX + 0.0000000001)
+
+            N = len(signal)                                # total number of samples
+            curPos = 0
+            countFrames = 0
+            nFFT = Win / 2
+
+            [fbank, freqs] = FE.mfccInitFilterBanks(Fs, nFFT)                # compute the triangular filter banks used in the mfcc calculation
+            nChroma, nFreqsPerChroma = FE.stChromaFeaturesInit(nFFT, Fs)
+
+            numOfTimeSpectralFeatures = 8
+            numOfHarmonicFeatures = 0
+            nceps = 0
+            numOfChromaFeatures = 13
+            totalNumOfFeatures = numOfTimeSpectralFeatures + nceps + numOfHarmonicFeatures + numOfChromaFeatures
+
+            x = signal
+            X = abs(FE.fft(x))
+            X = X / len(X)
+            curFV = np.zeros((totalNumOfFeatures, 1))
+            curFV[0] = FE.stZCR(x)                                             # zero crossing rate
+            curFV[1] = FE.stEnergy(x)                                          # short-term energy
+            curFV[2] = FE.stEnergyEntropy(x)                                   # short-term entropy of energy
+            [curFV[3], curFV[4]] = FE.stSpectralCentroidAndSpread(X, Fs)       # spectral centroid and spread
+            curFV[5] = FE.stSpectralEntropy(X)                                 # spectral entropy
+            curFV[6] = FE.stSpectralFlux(X, X.copy())                          # spectral flux
+            curFV[7] = FE.stSpectralRollOff(X, 0.90, Fs)                       # spectral rolloff
+            #curFV[numOfTimeSpectralFeatures:numOfTimeSpectralFeatures+nceps, 0] = stMFCC(X, fbank, nceps).copy()    # MFCCs
+
+            chromaNames, chromaF = FE.stChromaFeatures(X, Fs, nChroma, nFreqsPerChroma)
+            curFV[numOfTimeSpectralFeatures + nceps: numOfTimeSpectralFeatures + nceps + numOfChromaFeatures - 1] = chromaF
+            curFV[numOfTimeSpectralFeatures + nceps + numOfChromaFeatures - 1] = chromaF.std()
+
+            return curFV
