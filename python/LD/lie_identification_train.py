@@ -31,7 +31,7 @@ import pickle
 #
 # -----------------------------------------------------------------------------
 
-data_dir = 'data' # directory where the data files are stored
+data_dir = 'labelled-data' # directory where the data files are stored
 
 output_dir = 'training_output' # directory where the classifier(s) are stored
 
@@ -43,23 +43,51 @@ if not os.path.exists(output_dir):
 
 class_names = [] # the set of classes, i.e. speakers
 
-data = np.zeros((0,8002)) #8002 = 1 (timestamp) + 8000 (for 8kHz audio data) + 1 (label)
-hr_data = ((0,3)) #timestamp, hr, label
+data = np.zeros((0,8003)) #8003 = 1 (timestamp) + 8000 (for 8kHz audio data) + 1 (heart rate) + 1 label
 
 for filename in os.listdir(data_dir):
-    if filename.endswith(".csv") and filename.startswith("speaker-data"):
+    if filename.endswith(".csv") and filename.startswith("audio-allen"):
         filename_components = filename.split("-") # split by the '-' character
-        speaker = filename_components[2]
+        
+        speaker = filename_components[1]
+        number = filename_components[2]
+        label = filename_components[3]
+
         print("Loading data for {}.".format(speaker))
         if speaker not in class_names:
             class_names.append(speaker)
         speaker_label = class_names.index(speaker)
         sys.stdout.flush()
-        data_file = os.path.join(data_dir, filename)
-        data_for_current_speaker = np.genfromtxt(data_file, delimiter=',')
-        print("Loaded {} raw labelled audio data samples.".format(len(data_for_current_speaker)))
+        
+        #Audio file
+        audio_file = os.path.join(data_dir, filename)
+        audio_for_current_speaker = np.genfromtxt(audio_file, delimiter=',')
+        
+        #Heart rate
+        heart_file = os.path.join(data_dir, "ppg-allen-"+number+"-"+label)
+        heart_for_current_speaker = np.genfromtxt(heart_file, delimiter=",")
+
+        len_audio = len(audio_for_current_speaker)
+        len_heart = len(heart_for_current_speaker)
+        
+        print("Loaded {} raw audio data samples.".format(len_audio))
+        print("Loaded {} raw heart rate data samples.".format(len_heart))
         sys.stdout.flush()
-        data = np.append(data, data_for_current_speaker, axis=0)
+        
+        #alignment for heart rate and audio file (same number of rows)
+        temp_len = min(len_audio,len_heart)
+        temp_range = np.arange(temp_len)
+        #time + audio data 
+        aligned_audio = audio_for_current_speaker[temp_range,:-1]
+        #heart rate + label
+        aligned_heart = heart_for_current_speaker[temp_range,1:3]
+        
+        #append the aligned datas
+        aligned_data = np.append(aligned_audio,aligned_heart,axis=1)
+        
+        #finally append the rows from aligned data to data
+        data=np.append(data, aligned_data, axis=0)
+
 
 print("Found data for {} speakers : {}".format(len(class_names), ", ".join(class_names)))
 
