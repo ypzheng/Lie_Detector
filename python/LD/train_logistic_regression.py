@@ -170,8 +170,8 @@ print("---------------------- Grid Search -------------------------")
 
 param_grid = [{
     'penalty':['l2'],
-    'tol':[1e-4,1e-5,1e-6],
-    'C':[0.1,0.5,0.01],
+    'tol':[1e-7,1e-5,1e-6],
+    'C':[0.85,0.5,0.75],
     'solver':['newton-cg', 'lbfgs', 'liblinear', 'sag','saga']
 }]
 
