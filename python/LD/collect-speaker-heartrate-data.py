@@ -22,14 +22,14 @@ user_id = "hv3u9sd28rgi3p6e"
 
 # TODO: Change the filename of the output file.
 # You should keep it in the format "speaker-data-<speaker>-#.csv"
-audio_filename="audio-caitlyn-20.csv"#"SENSOR-NAME-#OFANSWER.csv"
-heart_filename="ppg-caitlyn-20.csv"
+audio_filename="audio-caitlyn-1.csv"#"SENSOR-NAME-#OFANSWER.csv"
+heart_filename="ppg-caitlyn-1.csv"
 # 0=Caitlyn, 1=Allen, 2=None, 3=Andy
 
 # TODO: Change the label to match the speaker; it must be numeric
 #label = 3
 
-data_dir = "data"
+data_dir = "data-2"
 
 if not os.path.exists(data_dir):
     os.mkdir(data_dir)
