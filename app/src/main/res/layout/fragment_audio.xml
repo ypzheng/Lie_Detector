@@ -28,12 +28,12 @@
 
     <TextView
         android:id="@+id/txtSpeaker"
-        android:layout_below="@id/switchMicrophone"
-        android:text="@string/lie_initial"
-        android:textSize="20sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center" />
+        android:layout_below="@id/switchMicrophone"
+        android:gravity="center"
+        android:text="@string/lie_initial"
+        android:textSize="20sp" />
 
     <ImageView
         android:id="@+id/imgSpectrogram"
@@ -42,14 +42,5 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         tools:ignore="ContentDescription" />
-
-    <TextView
-        android:id="@+id/heartRate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/txtSpeaker"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="18dp"
-        android:text="@string/heart_rate" />
 
 </RelativeLayout>

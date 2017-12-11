@@ -23,8 +23,6 @@
 
     <string name="consent_btn">Consent?</string>
 
-    <string name="heart_rate_initial">0</string>
-
     <string name="app_package_identifier_prefix">package:</string>
     <string name="about_app_version">Version %s</string>
 
@@ -32,10 +30,7 @@
     <string name="text_switch_microphone">Microphone</string>
     <string name="text_switch_heart_rate">Photoplethysmography</string>
     <string name="text_switch_gps">Location</string>
-
-    <string name="heart_rate">Heart Rate: 0</string>
-
-
+    
     <string name="app_details">Lie Detector</string>
     <string name="speaker_initial">NONE</string>
 

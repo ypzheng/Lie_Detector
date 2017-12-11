@@ -34,7 +34,6 @@ import cs.umass.edu.myactivitiestoolkit.liedetector.services.ServiceManager;
 
 public class AudioFragment extends Fragment {
 
-    private TextView heartRate;
 
     @SuppressWarnings("unused")
     /** Used during debugging to identify logs by class */
@@ -84,7 +83,6 @@ public class AudioFragment extends Fragment {
         });
         imgSpectrogram = (ImageView) rootView.findViewById(R.id.imgSpectrogram);
         txtSpeaker = (TextView) rootView.findViewById(R.id.txtSpeaker);
-        heartRate = (TextView)rootView.findViewById(R.id.heartRate);
         return rootView;
     }
 
@@ -213,13 +211,13 @@ public class AudioFragment extends Fragment {
             if (intent.getAction() != null) {
                 if (intent.getAction().equals(Constants.ACTION.BROADCAST_MESSAGE)) {
                     int message = intent.getIntExtra(Constants.KEY.MESSAGE, -1);
-                    if (message == Constants.MESSAGE.AUDIO_SERVICE_STOPPED){
+                    if (message == Constants.MESSAGE.AUDIO_SERVICE_STOPPED) {
                         switchRecord.setChecked(false);
                     }
-                } else if (intent.getAction().equals(Constants.ACTION.BROADCAST_SPECTROGRAM)){
+                } else if (intent.getAction().equals(Constants.ACTION.BROADCAST_SPECTROGRAM)) {
                     double[][] spectrogram = (double[][]) intent.getSerializableExtra(Constants.KEY.SPECTROGRAM);
                     updateSpectrogram(spectrogram);
-                } else if (intent.getAction().equals(Constants.ACTION.BROADCAST_SPEAKER)){
+                } else if (intent.getAction().equals(Constants.ACTION.BROADCAST_SPEAKER)) {
                     final String speaker = intent.getStringExtra(Constants.KEY.SPEAKER);
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
@@ -227,24 +225,10 @@ public class AudioFragment extends Fragment {
                             txtSpeaker.setText(speaker);
                         }
                     });
-                } else if (intent.getAction().equals(Constants.ACTION.BROADCAST_HEART_RATE)){
-                    final String heartbeat = intent.getStringExtra(Constants.KEY.HEART_RATE);
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            heartRate.setText(heartbeat);
-                        }
-                    });
                 }
 
             }
-            final String heartBeat = intent.getStringExtra(Constants.KEY.HEART_RATE);
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    heartRate.setText(heartBeat);
-                }
-            });
+
         }
     };
 
