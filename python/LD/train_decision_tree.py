@@ -64,7 +64,7 @@ if not os.path.exists(output_dir):
 
 class_names = [] # the set of classes, i.e. speakers
 
-data = np.zeros((0,8004)) #8003 = 1 (timestamp) + 8000 (for 8kHz audio data) + 1 (heart rate) + 1 label
+data = np.zeros((0,8004)) #8003 = 1 (timestamp) + 8000 (for 8kHz audio data) + 2 (heart rate) + 1 label
 
 for filename in os.listdir(data_dir):
     if filename.endswith(".csv") and filename.startswith("audio-allen"):
@@ -101,13 +101,25 @@ for filename in os.listdir(data_dir):
         #time + audio data 
         aligned_audio = audio_for_current_speaker[temp_range,:-1]
         #heart rate + label
-        aligned_heart = heart_for_current_speaker[temp_range,1:3]
+        #aligned_heart = heart_for_current_speaker[temp_range,1:3]
+        aligned_label = heart_for_current_speaker[temp_range,2:3]
         
-        temp_variant = np.var(heart_for_current_speaker[temp_range,:1])
-        temp_variant = np.ones((temp_len,1))*temp_variant
+        aligned_heart = heart_for_current_speaker[temp_range,1:2]
+        
+
+        temp_variant = np.var(aligned_heart)
+        temp_variant = np.ones((temp_len,1)).astype(float)*temp_variant
+
+        temp_std = np.std(aligned_heart)
+        temp_std = np.ones((temp_len,1)).astype(float)*temp_std
+        
+        temp_max = np.max(aligned_heart)
+        temp_max = np.ones((temp_len,1)).astype(float)*temp_max
         #append the aligned datas
         aligned_data = np.append(aligned_audio,temp_variant,axis=1)
-        aligned_data = np.append(aligned_data,aligned_heart,axis=1)
+        aligned_data = np.append(aligned_data,temp_std,axis=1)
+        #aligned_data = np.append(aligned_data,temp_max)
+        aligned_data = np.append(aligned_data,aligned_label,axis=1)
         
         #finally append the rows from aligned data to data
         data=np.append(data, aligned_data, axis=0)
@@ -143,12 +155,13 @@ for i,window_with_timestamp_and_label in enumerate(data):
     label = data[i,-1]
     print "Extracting features for window " + str(i) + "..."
     x = feature_extractor.extract_features(window)
-    if (len(x)+2 != X.shape[1]):
+    if (len(x)+3 != X.shape[1]):
         print("Received feature vector of length {}. Expected feature vector of length {}.".format(len(x), X.shape[1]))
     
     #Add the heart rate features
     x = np.append(x, window_with_timestamp_and_label[-2])
     x = np.append(x, window_with_timestamp_and_label[-3])
+    #x = np.append(x, window_with_timestamp_and_label[-4])
 
     X = np.append(X, np.reshape(x, (1,-1)), axis=0)
     
@@ -194,3 +207,11 @@ for score in scores:
     mean= clf.cv_results_['mean_test_score']
     stds = clf.cv_results_['std_test_score']
     params = clf.cv_results_['params']
+
+best_classifier = DecisionTreeClassifier() # change this to the classifier (tested above) that gives the best results
+best_classifier.set_params(**(clf.best_params_))
+best_classifier.fit(X,y)
+classifier_filename='classifier.pickle'
+print("Saving best classifier to {}...".format(os.path.join(output_dir, classifier_filename)))
+with open(os.path.join(output_dir, classifier_filename), 'wb') as f: # 'wb' stands for 'write bytes'
+    pickle.dump(best_classifier, f)
