@@ -1,6 +1,8 @@
 package cs.umass.edu.myactivitiestoolkit.liedetector.services.msband;
 
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.microsoft.band.BandClient;
@@ -12,10 +14,15 @@ import com.microsoft.band.ConnectionState;
 import com.microsoft.band.sensors.BandHeartRateEvent;
 import com.microsoft.band.sensors.BandHeartRateEventListener;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import cs.umass.edu.myactivitiestoolkit.liedetector.R;
+import cs.umass.edu.myactivitiestoolkit.liedetector.communication.MHLClientFilter;
 import cs.umass.edu.myactivitiestoolkit.liedetector.constants.Constants;
 import cs.umass.edu.myactivitiestoolkit.liedetector.ppg.HRSensorReading;
 import cs.umass.edu.myactivitiestoolkit.liedetector.services.SensorService;
+import edu.umass.cs.MHLClient.client.MessageReceiver;
 
 
 public class BandService extends SensorService implements BandHeartRateEventListener {
@@ -38,6 +45,20 @@ public class BandService extends SensorService implements BandHeartRateEventList
 
     @Override
     public void onConnected() {
+        client.registerMessageReceiver(new MessageReceiver(MHLClientFilter.SPEAKER) {
+            @Override
+            protected void onMessageReceived(JSONObject json) {
+                String speaker;
+                try {
+                    JSONObject data = json.getJSONObject("data");
+                    speaker = data.getString("speaker");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    return;
+                }
+                broadcastSpeaker(speaker);
+            }
+        });
         super.onConnected();
     }
 
@@ -164,6 +185,14 @@ public class BandService extends SensorService implements BandHeartRateEventList
                 // Do nothing as this is happening during destroy
             }
         }
+    }
+
+    public void broadcastSpeaker(String speaker) {
+        Intent intent = new Intent();
+        intent.putExtra(Constants.KEY.SPEAKER, speaker);
+        intent.setAction(Constants.ACTION.BROADCAST_SPEAKER);
+        LocalBroadcastManager manager = LocalBroadcastManager.getInstance(this);
+        manager.sendBroadcast(intent);
     }
 
 }

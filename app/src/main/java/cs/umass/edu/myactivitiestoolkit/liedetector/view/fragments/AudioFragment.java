@@ -114,7 +114,6 @@ public class AudioFragment extends Fragment {
         filter.addAction(Constants.ACTION.BROADCAST_MESSAGE);
         filter.addAction(Constants.ACTION.BROADCAST_SPECTROGRAM);
         filter.addAction(Constants.ACTION.BROADCAST_SPEAKER);
-        filter.addAction(Constants.ACTION.BROADCAST_HEART_RATE);
         broadcastManager.registerReceiver(receiver, filter);
     }
 
