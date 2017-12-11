@@ -43,7 +43,6 @@ public class AudioFragment extends Fragment {
     private static final int AUDIO_PERMISSION_REQUEST_CODE = 5;
 
     /** The image displaying the audio spectrogram. **/
-    private ImageView imgSpectrogram;
 
     /** The switch which toggles the {@link AudioService}. **/
     private Switch switchRecord;
@@ -52,6 +51,13 @@ public class AudioFragment extends Fragment {
     private ServiceManager serviceManager;
 
     private TextView txtSpeaker;
+    private TextView num_truth;
+    private TextView num_lie;
+    private TextView percent_truth;
+
+    private int value_truth;
+    private int value_lie;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -81,8 +87,12 @@ public class AudioFragment extends Fragment {
                 }
             }
         });
-        imgSpectrogram = (ImageView) rootView.findViewById(R.id.imgSpectrogram);
+        value_lie = 0;
+        value_truth = 0;
         txtSpeaker = (TextView) rootView.findViewById(R.id.txtSpeaker);
+        num_truth = (TextView) rootView.findViewById(R.id.num_truth);
+        num_lie = (TextView) rootView.findViewById(R.id.num_lie);
+        percent_truth = (TextView) rootView.findViewById(R.id.percent_truth);
         return rootView;
     }
 
@@ -138,6 +148,8 @@ public class AudioFragment extends Fragment {
     public void onPermissionGranted(){
         serviceManager.startSensorService(AudioService.class);
         serviceManager.startSensorService(BandService.class);
+        value_truth = 0;
+        value_lie = 0;
     }
 
     /**
@@ -213,15 +225,22 @@ public class AudioFragment extends Fragment {
                     if (message == Constants.MESSAGE.AUDIO_SERVICE_STOPPED) {
                         switchRecord.setChecked(false);
                     }
-                } else if (intent.getAction().equals(Constants.ACTION.BROADCAST_SPECTROGRAM)) {
-                    double[][] spectrogram = (double[][]) intent.getSerializableExtra(Constants.KEY.SPECTROGRAM);
-                    updateSpectrogram(spectrogram);
                 } else if (intent.getAction().equals(Constants.ACTION.BROADCAST_SPEAKER)) {
                     final String speaker = intent.getStringExtra(Constants.KEY.SPEAKER);
+                    if(speaker.equals("truth")){
+                        value_truth++;
+                    }
+                    else{
+                        value_lie++;
+                    }
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            txtSpeaker.setText(speaker);
+                            txtSpeaker.setText("Truth or Lie: " + speaker);
+                            num_truth.setText("Truth: " + value_truth);
+                            num_lie.setText("Lie: " + value_lie);
+                            float percent = ((float)value_truth/((float)value_truth+(float)value_lie))*100;
+                            percent_truth.setText("Truth: "+ percent+"%");
                         }
                     });
                 }
@@ -231,35 +250,4 @@ public class AudioFragment extends Fragment {
         }
     };
 
-    /**
-     * Converts the spectrogram values into a heat map and projects the pixels onto a bitmap.
-     * @param spectrogram the spectrogram values as a 2D array.
-     */
-    private void updateSpectrogram(double[][] spectrogram){
-        int width = spectrogram.length;
-        int height = spectrogram[0].length;
-
-        int[] rgbValues = new int[width * height];
-
-        double max = 0, min = 0;
-        for (int j = 0; j < height; j++) {
-            for (double[] row : spectrogram) {
-                if (row[j] > max) {
-                    max = row[j];
-                }
-                if (row[j] < min) {
-                    min = row[j];
-                }
-            }
-        }
-        int counter = 0;
-        for (int j = 0; j < height/2; j++) {
-            for (double[] row : spectrogram) {
-                rgbValues[counter++] = heatMap(min, max, row[j]);
-            }
-        }
-
-        Bitmap bitmap = Bitmap.createBitmap(rgbValues, width, height, Bitmap.Config.ARGB_8888);
-        imgSpectrogram.setImageBitmap(bitmap);
-    }
 }

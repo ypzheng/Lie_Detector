@@ -21,6 +21,10 @@
     <string name="lie_status" formatted="false">Truth or Lie: %s</string>
     <string name="lie_initial">Truth or Lie: </string>
 
+    <string name="num_truth">Truth: 0</string>
+    <string name="num_lie">Lie: 0</string>
+    <string name="percent_truth">Truth: 0%</string>
+
     <string name="consent_btn">Consent?</string>
 
     <string name="heart_rate_initial">0</string>

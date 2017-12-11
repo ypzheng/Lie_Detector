@@ -43,4 +43,31 @@
         android:layout_centerVertical="true"
         tools:ignore="ContentDescription" />
 
+    <TextView
+        android:id="@+id/num_truth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtSpeaker"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="11dp"
+        android:text="@string/num_truth" />
+
+    <TextView
+        android:id="@+id/percent_truth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/num_lie"
+        android:layout_alignStart="@+id/num_lie"
+        android:layout_below="@+id/num_lie"
+        android:text="@string/percent_truth" />
+
+    <TextView
+        android:id="@+id/num_lie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/num_truth"
+        android:layout_alignStart="@+id/num_truth"
+        android:layout_below="@+id/num_truth"
+        android:text="@string/num_lie" />
+
 </RelativeLayout>
