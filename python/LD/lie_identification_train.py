@@ -43,7 +43,7 @@ if not os.path.exists(output_dir):
 
 class_names = [] # the set of classes, i.e. speakers
 
-data = np.zeros((0,8003)) #8003 = 1 (timestamp) + 8000 (for 8kHz audio data) + 1 (heart rate) + 1 label
+data = np.zeros((0,8004)) #8003 = 1 (timestamp) + 8000 (for 8kHz audio data) + 1 (heart rate) + 1 label
 
 for filename in os.listdir(data_dir):
     if filename.endswith(".csv") and filename.startswith("audio-caitlyn"):
@@ -82,8 +82,11 @@ for filename in os.listdir(data_dir):
         #heart rate + label
         aligned_heart = heart_for_current_speaker[temp_range,1:3]
         
+        temp_variant = np.var(heart_for_current_speaker[temp_range,:1])
+        temp_variant = np.ones((temp_len,1))*temp_variant
         #append the aligned datas
-        aligned_data = np.append(aligned_audio,aligned_heart,axis=1)
+        aligned_data = np.append(aligned_audio,temp_variant,axis=1)
+        aligned_data = np.append(aligned_data,aligned_heart,axis=1)
         
         #finally append the rows from aligned data to data
         data=np.append(data, aligned_data, axis=0)
@@ -100,7 +103,7 @@ print("Found data for {} speakers : {}".format(len(class_names), ", ".join(class
 # You may need to change this depending on how you compute your features
 n_format = 55
 n_pitch = 64
-n_heart_rate = 1
+n_heart_rate = 2
 n_mfcc = 0 #507
 n_st_features = 8 + 13
 n_features = n_format + n_pitch + n_heart_rate+n_mfcc +n_st_features# 20 formant features + 16 pitch contour features + 75 mfcc delta coefficients
@@ -115,16 +118,17 @@ y = np.zeros(0,)
 feature_extractor = FeatureExtractor(debug=False)
 
 for i,window_with_timestamp_and_label in enumerate(data):
-    window = window_with_timestamp_and_label[1:-2]
+    window = window_with_timestamp_and_label[1:-3]
     label = data[i,-1]
     print "Extracting features for window " + str(i) + "..."
     x = feature_extractor.extract_features(window)
-    if (len(x)+1 != X.shape[1]):
+    if (len(x)+2 != X.shape[1]):
         print("Received feature vector of length {}. Expected feature vector of length {}.".format(len(x), X.shape[1]))
     
     #Add the heart rate features
     x = np.append(x, window_with_timestamp_and_label[-2])
-   
+    x = np.append(x, window_with_timestamp_and_label[-3])
+
     X = np.append(X, np.reshape(x, (1,-1)), axis=0)
     
     y = np.append(y, label)
