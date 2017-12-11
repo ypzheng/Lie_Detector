@@ -39,7 +39,6 @@ import java.lang.ref.WeakReference;
 import cs.umass.edu.myactivitiestoolkit.liedetector.R;
 import cs.umass.edu.myactivitiestoolkit.liedetector.constants.Constants;
 import cs.umass.edu.myactivitiestoolkit.liedetector.util.PermissionsUtil;
-import cs.umass.edu.myactivitiestoolkit.liedetector.view.fragments.AudioAndHeartFragment;
 import cs.umass.edu.myactivitiestoolkit.liedetector.view.fragments.AboutFragment;
 import cs.umass.edu.myactivitiestoolkit.liedetector.view.fragments.SettingsFragment;
 import cs.umass.edu.myactivitiestoolkit.liedetector.view.fragments.AudioFragment;
