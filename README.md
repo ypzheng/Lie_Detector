@@ -1,10 +1,11 @@
 # Lie_Detector
-Lie Detection by voice and heart rate
+Lie Detection by voice and heart rate using Android Device and Microsoft Band 2.  
 
-Project Struture
------
-## python/LD:
-python code for machine learning
+### Project Struture
+
+### python/LD:
+------
+Python code for machine learning
 ### collect-speaker-heartrate-data.py:
 python script for collecting audio and heartrate data from phone's microphone and microsoft band 2
 
@@ -33,12 +34,12 @@ Cross Validation Grid Search on decision tree from sklearn and export best model
 Corss Validation and Grid Search on logistic regression from sklearn
 
 ### lie_detection.py
-Recieve data from server. Get best model from `pickle` in python/LD/training_output, run feature extraction and classification.
+Recieves data from server. Gets best model from `pickle` in python/LD/training_output, runs feature extraction and classification.
 
-Collected Data:
+### Collected Data:
 -----
 ### python/LD/data
-un-labelled data from data collection sessions. File name format is `type_of_data-speaker-number`
+Unlabelled data from data collection sessions. File name format is `type_of_data-speaker-number`
 
 ### python/LD/labelled-data
-labelled data from `python/LD/data` data.
+Labelled data from `python/LD/data` data.  0 - lie, 1 - truth.
