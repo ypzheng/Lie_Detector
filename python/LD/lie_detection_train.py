@@ -202,14 +202,4 @@ for tree_index, tree in enumerate(trees):
 #    export_graphviz(tree, out_file='tree{}.dot'.format(tree_index), feature_names = feature_names)
 
 
-# TODO: when ready, set this to the best model you found, trained on all the data
-print("Training RF classifier on entire dataset...")
-best_param = {'min_samples_split': 2, 'n_estimators': 450, 'random_state': 1, 'max_depth': 7, 'min_samples_leaf': 1}
-# 200 89.7%
-best_classifier = RandomForestClassifier(n_estimators=450) # change this to the classifier (tested above) that gives the best results
-best_classifier.set_params(**best_param)
-best_classifier.fit(X,y)
-classifier_filename='classifier.pickle'
-print("Saving best classifier to {}...".format(os.path.join(output_dir, classifier_filename)))
-with open(os.path.join(output_dir, classifier_filename), 'wb') as f: # 'wb' stands for 'write bytes'
-    pickle.dump(best_classifier, f)
+

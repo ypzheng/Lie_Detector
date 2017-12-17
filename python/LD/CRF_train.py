@@ -155,40 +155,11 @@ sys.stdout.flush()
 
 
 
-# X_train, X_test, y_train, y_test = train_test_split(X, y.astype(int))
 
-# # we add a constant 1 feature for the bias
-# X_train_bias = np.hstack([X_train, np.ones((X_train.shape[0], 1))])
-# X_test_bias = np.hstack([X_test, np.ones((X_test.shape[0], 1))])
 y = y.astype(int)
 model = MultiClassClf(n_features=X.shape[1], n_classes=2)
 
-# n_slack_svm = NSlackSSVM(model, verbose=2, check_constraints=False, C=0.1,
-#                          batch_size=100, tol=1e-2)
-# one_slack_svm = OneSlackSSVM(model, verbose=2, C=.10, tol=.001)
 
-
-# fw_bc_svm = FrankWolfeSSVM(model, C=.1, max_iter=50)
-# fw_batch_svm = FrankWolfeSSVM(model, C=.1, max_iter=50, batch_mode=True)
-
-# n-slack cutting plane ssvm
-# start = time()
-# n_slack_svm.fit(X_train_bias, y_train)
-# time_n_slack_svm = time() - start
-# y_pred = np.hstack(n_slack_svm.predict(X_test_bias))
-# print("Score with pystruct n-slack ssvm: %f (took %f seconds)"
-#       % (np.mean(y_pred == y_test), time_n_slack_svm))
-
-# ## 1-slack cutting plane ssvm
-# start = time()
-# one_slack_svm.fit(X_train_bias, y_train)
-# time_one_slack_svm = time() - start
-# y_pred = np.hstack(one_slack_svm.predict(X_test_bias))
-# print("Score with pystruct 1-slack ssvm: %f (took %f seconds)"
-#       % (np.mean(y_pred == y_test), time_one_slack_svm))
-
-# subgradient_svm = SubgradientSSVM(model, C=0.1, learning_rate=0.000001,
-#                                   max_iter=1000, verbose=0)
 print("\n")
 print("---------------------- Grid Search -------------------------")
 #grid_search
