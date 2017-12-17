@@ -35,3 +35,10 @@ Corss Validation and Grid Search on logistic regression from sklearn
 ### lie_detection.py
 Recieve data from server. Get best model from `pickle` in python/LD/training_output, run feature extraction and classification.
 
+Collected Data:
+-----
+###python/LD/data
+un-labelled data from data collection sessions. File name format is `type_of_data-speaker-number`
+
+###python/LD/labelled-data
+labelled data from `python/LD/data` data.
