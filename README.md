@@ -37,8 +37,8 @@ Recieve data from server. Get best model from `pickle` in python/LD/training_out
 
 Collected Data:
 -----
-###python/LD/data
+### python/LD/data
 un-labelled data from data collection sessions. File name format is `type_of_data-speaker-number`
 
-###python/LD/labelled-data
+### python/LD/labelled-data
 labelled data from `python/LD/data` data.
